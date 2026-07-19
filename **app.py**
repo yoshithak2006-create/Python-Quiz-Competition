@@ -1,0 +1,17 @@
+import streamlit as st
+
+st.set_page_config(page_title="Python Quiz Competition", page_icon="🏆")
+
+st.title("🏆 Python Quiz Competition")
+
+st.write("Welcome to the Online Quiz")
+
+name = st.text_input("Enter Student Name")
+roll = st.text_input("Enter Roll Number")
+
+if st.button("Start Quiz"):
+    if name == "" or roll == "":
+        st.error("Please enter Student Name and Roll Number")
+    else:
+        st.success(f"Welcome {name}")
+        st.write("Quiz will start in the next step...")
