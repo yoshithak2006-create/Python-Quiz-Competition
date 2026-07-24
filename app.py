@@ -21,10 +21,17 @@ if "started" not in st.session_state:
     st.session_state.started = False
 
 
+# Login Page
+
 if not st.session_state.started:
 
-    name = st.text_input("👤 Enter Student Name")
-    roll = st.text_input("🆔 Enter Roll Number")
+    name = st.text_input(
+        "👤 Enter Student Name"
+    )
+
+    roll = st.text_input(
+        "🆔 Enter Roll Number"
+    )
 
 
     st.markdown("""
@@ -43,29 +50,60 @@ if not st.session_state.started:
     if st.button("🚀 Start Quiz"):
 
         if name == "" or roll == "":
-            st.warning("Please Enter Name and Roll Number")
+
+            st.warning(
+                "Please Enter Name and Roll Number"
+            )
+
 
         else:
-    st.session_state.started = True
-    st.session_state.name = name
-    st.session_state.roll = roll
-    st.session_state.start_time = time.time()
-    st.rerun()
+
+            st.session_state.started = True
+
+            st.session_state.name = name
+
+            st.session_state.roll = roll
+
+            st.session_state.start_time = time.time()
+
+            st.rerun()
+
+
+
+# Quiz Page
+
 else:
 
-    st.success(f"Welcome {st.session_state.name}")
 
-    remaining = 90 - int(
+    st.success(
+        f"Welcome {st.session_state.name}"
+    )
+
+
+    elapsed = int(
         time.time() - st.session_state.start_time
     )
+
+
+    remaining = max(
+        0,
+        90 - elapsed
+    )
+
 
     st.warning(
         f"⏱️ Time Left : {remaining} Seconds"
     )
 
-    if remaining <= 0:
-        st.error("⏰ Time Over! Quiz Submitted")
+
+    if remaining == 0:
+
+        st.error(
+            "⏰ Time Over! Quiz Submitted"
+        )
+
         st.stop()
+
 
 
     answers = []
@@ -73,25 +111,42 @@ else:
 
     for i, q in enumerate(questions):
 
-        st.subheader(q["question"])
+
+        st.subheader(
+            q["question"]
+        )
+
 
         ans = st.radio(
+
             "Select Answer",
+
             q["options"],
+
             key=i
+
         )
+
 
         answers.append(ans)
 
 
+
     if st.button("✅ Submit Quiz"):
+
 
         score = 0
 
+
         for i, q in enumerate(questions):
 
-            if answers[i].startswith(q["answer"]):
+
+            if answers[i].startswith(
+                q["answer"]
+            ):
+
                 score += 1
+
 
 
         st.success(
@@ -99,38 +154,70 @@ else:
         )
 
 
-        with open("results.csv", "a") as f:
+
+        with open(
+            "results.csv",
+            "a"
+        ) as f:
+
 
             f.write(
                 f"{st.session_state.name},{st.session_state.roll},{score}\n"
             )
 
 
+
         pdf = create_certificate(
+
             st.session_state.name,
+
             score
+
         )
 
 
-        with open(pdf, "rb") as file:
+
+        with open(
+            pdf,
+            "rb"
+        ) as file:
+
 
             st.download_button(
+
                 label="📄 Download Certificate",
+
                 data=file,
+
                 file_name=pdf,
+
                 mime="application/pdf"
+
             )
 
 
 
-    st.write("## 🏆 Leaderboard")
+    # Leaderboard
+
+
+    st.write(
+        "## 🏆 Leaderboard"
+    )
 
 
     try:
 
+
         df = pd.read_csv(
+
             "results.csv",
-            names=["Name", "Roll", "Score"]
+
+            names=[
+                "Name",
+                "Roll",
+                "Score"
+            ]
+
         )
 
 
@@ -140,17 +227,26 @@ else:
 
 
         df = df.sort_values(
+
             by="Score",
+
             ascending=False
+
         )
 
 
         st.dataframe(
+
             df,
+
             use_container_width=True
+
         )
 
 
     except Exception:
 
-        st.info("No Results Yet")
+
+        st.info(
+            "No Results Yet"
+        )
