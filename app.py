@@ -95,11 +95,12 @@ else:
         )
 
 
-        answers.append(ans)
-            if st.button("✅ Submit Quiz"):
+                answers.append(ans)
+
+
+    if st.button("✅ Submit Quiz"):
 
         score = 0
-
 
         for i, q in enumerate(questions):
 
