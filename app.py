@@ -46,12 +46,11 @@ if not st.session_state.started:
             st.warning("Please Enter Name and Roll Number")
 
         else:
-            st.session_state.started = True
-            st.session_state.name = name
-            st.session_state.roll = roll
-            st.session_state.start_time = time.time()
-
-            st.rerun()
+    st.session_state.started = True
+    st.session_state.name = name
+    st.session_state.roll = roll
+    st.session_state.start_time = time.time()
+    st.rerun()
 else:
 
     st.success(f"Welcome {st.session_state.name}")
