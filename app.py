@@ -56,7 +56,9 @@ if not st.session_state.started:
 
 else:
 
-    st.success(f"Welcome {st.session_state.name}")
+    st.success(
+        f"Welcome {st.session_state.name}"
+    )
 
 
     remaining = 90 - int(
@@ -70,7 +72,9 @@ else:
 
 
     if remaining <= 0:
-        st.error("⏰ Time Over! Quiz Submitted")
+        st.error(
+            "⏰ Time Over! Quiz Submitted"
+        )
         st.stop()
 
 
@@ -79,7 +83,10 @@ else:
 
     for i, q in enumerate(questions):
 
-        st.subheader(q["question"])
+        st.subheader(
+            q["question"]
+        )
+
 
         ans = st.radio(
             "Select Answer",
@@ -87,39 +94,46 @@ else:
             key=i
         )
 
-                answers.append(ans)
 
-
-    if st.button("✅ Submit Quiz"):
+        answers.append(ans)
+            if st.button("✅ Submit Quiz"):
 
         score = 0
+
 
         for i, q in enumerate(questions):
 
             if answers[i].startswith(q["answer"]):
                 score += 1
 
+
         st.success(
             f"🎉 Your Score : {score}/{len(questions)}"
         )
 
+
         with open("results.csv", "a") as f:
+
             f.write(
                 f"{st.session_state.name},{st.session_state.roll},{score}\n"
             )
+
 
         pdf = create_certificate(
             st.session_state.name,
             score
         )
 
+
         with open(pdf, "rb") as file:
+
             st.download_button(
                 label="📄 Download Certificate",
                 data=file,
                 file_name=pdf,
                 mime="application/pdf"
             )
+
 
 
     st.write("## 🏆 Leaderboard")
