@@ -87,38 +87,33 @@ else:
             key=i
         )
 
-        answers.append(ans)
-            if st.button("✅ Submit Quiz"):
+                answers.append(ans)
+
+
+    if st.button("✅ Submit Quiz"):
 
         score = 0
-
 
         for i, q in enumerate(questions):
 
             if answers[i].startswith(q["answer"]):
                 score += 1
 
-
         st.success(
             f"🎉 Your Score : {score}/{len(questions)}"
         )
 
-
         with open("results.csv", "a") as f:
-
             f.write(
                 f"{st.session_state.name},{st.session_state.roll},{score}\n"
             )
-
 
         pdf = create_certificate(
             st.session_state.name,
             score
         )
 
-
         with open(pdf, "rb") as file:
-
             st.download_button(
                 label="📄 Download Certificate",
                 data=file,
