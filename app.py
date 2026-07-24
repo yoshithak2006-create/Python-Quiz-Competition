@@ -78,15 +78,12 @@ else:
         st.stop()
 
 
-    answers = []
+        answers = []
 
 
     for i, q in enumerate(questions):
 
-        st.subheader(
-            q["question"]
-        )
-
+        st.subheader(q["question"])
 
         ans = st.radio(
             "Select Answer",
@@ -94,14 +91,12 @@ else:
             key=i
         )
 
-
-                answers.append(ans)
+        answers.append(ans)
 
 
     if st.button("✅ Submit Quiz"):
 
         score = 0
-
         for i, q in enumerate(questions):
 
             if answers[i].startswith(q["answer"]):
