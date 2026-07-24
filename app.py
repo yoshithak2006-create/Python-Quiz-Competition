@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import time
 from questions import questions
 from certificate import create_certificate
 
@@ -44,6 +45,19 @@ if not st.session_state.started:
             st.rerun()
 
 else:
+
+    else:
+
+    if "start_time" not in st.session_state:
+        st.session_state.start_time = time.time()
+
+    remaining = 90 - int(time.time() - st.session_state.start_time)
+
+    st.warning(f"⏱️ Time Left: {remaining} seconds")
+
+    if remaining <= 0:
+        st.error("⏰ Time Over! Quiz Submitted")
+        st.stop()
 
     st.success(f"Welcome {st.session_state.name}")
 
