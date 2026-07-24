@@ -52,33 +52,24 @@ if not st.session_state.started:
             st.session_state.start_time = time.time()
 
             st.rerun()
-
-
 else:
 
-    st.success(
-        f"Welcome {st.session_state.name}"
-    )
-
+    st.success(f"Welcome {st.session_state.name}")
 
     remaining = 90 - int(
         time.time() - st.session_state.start_time
     )
 
-
     st.warning(
         f"⏱️ Time Left : {remaining} Seconds"
     )
 
-
     if remaining <= 0:
-        st.error(
-            "⏰ Time Over! Quiz Submitted"
-        )
+        st.error("⏰ Time Over! Quiz Submitted")
         st.stop()
 
 
-        answers = []
+    answers = []
 
 
     for i, q in enumerate(questions):
@@ -97,6 +88,7 @@ else:
     if st.button("✅ Submit Quiz"):
 
         score = 0
+
         for i, q in enumerate(questions):
 
             if answers[i].startswith(q["answer"]):
