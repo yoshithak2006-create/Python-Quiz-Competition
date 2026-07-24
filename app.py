@@ -1,8 +1,10 @@
 import streamlit as st
 import pandas as pd
 import time
+
 from questions import questions
 from certificate import create_certificate
+
 
 st.set_page_config(
     page_title="Python Quiz Competition",
@@ -10,16 +12,20 @@ st.set_page_config(
     layout="centered"
 )
 
+
 st.title("🏆 PYTHON QUIZ COMPETITION 2026")
 st.subheader("Developed by K. Yoshitha")
 
+
 if "started" not in st.session_state:
     st.session_state.started = False
+
 
 if not st.session_state.started:
 
     name = st.text_input("👤 Enter Student Name")
     roll = st.text_input("🆔 Enter Roll Number")
+
 
     st.markdown("""
 ### 📋 Instructions
@@ -33,6 +39,7 @@ if not st.session_state.started:
 ✅ Click Submit After Completing Quiz
 """)
 
+
     if st.button("🚀 Start Quiz"):
 
         if name == "" or roll == "":
@@ -42,26 +49,33 @@ if not st.session_state.started:
             st.session_state.started = True
             st.session_state.name = name
             st.session_state.roll = roll
+            st.session_state.start_time = time.time()
+
             st.rerun()
+
 
 else:
 
-    else:
+    st.success(f"Welcome {st.session_state.name}")
 
-    if "start_time" not in st.session_state:
-        st.session_state.start_time = time.time()
 
-    remaining = 90 - int(time.time() - st.session_state.start_time)
+    remaining = 90 - int(
+        time.time() - st.session_state.start_time
+    )
 
-    st.warning(f"⏱️ Time Left: {remaining} seconds")
+
+    st.warning(
+        f"⏱️ Time Left : {remaining} Seconds"
+    )
+
 
     if remaining <= 0:
         st.error("⏰ Time Over! Quiz Submitted")
         st.stop()
 
-    st.success(f"Welcome {st.session_state.name}")
 
     answers = []
+
 
     for i, q in enumerate(questions):
 
@@ -74,27 +88,37 @@ else:
         )
 
         answers.append(ans)
-
-    if st.button("✅ Submit Quiz"):
+            if st.button("✅ Submit Quiz"):
 
         score = 0
+
 
         for i, q in enumerate(questions):
 
             if answers[i].startswith(q["answer"]):
                 score += 1
 
-        st.success(f"🎉 Your Score : {score}/{len(questions)}")
 
-        with open("results.csv","a") as f:
-            f.write(f"{st.session_state.name},{st.session_state.roll},{score}\n"
+        st.success(
+            f"🎉 Your Score : {score}/{len(questions)}"
+        )
+
+
+        with open("results.csv", "a") as f:
+
+            f.write(
+                f"{st.session_state.name},{st.session_state.roll},{score}\n"
             )
-            pdf = create_certificate(
+
+
+        pdf = create_certificate(
             st.session_state.name,
             score
         )
 
+
         with open(pdf, "rb") as file:
+
             st.download_button(
                 label="📄 Download Certificate",
                 data=file,
@@ -102,22 +126,35 @@ else:
                 mime="application/pdf"
             )
 
-        st.write("## 🏆 Leaderboard")
 
-        try:
-            df = pd.read_csv(
-                "results.csv",
-                names=["Name", "Roll", "Score"]
-            )
+    st.write("## 🏆 Leaderboard")
 
-            df["Score"] = pd.to_numeric(df["Score"])
 
-            df = df.sort_values(
-                by="Score",
-                ascending=False
-            )
+    try:
 
-            st.dataframe(df, use_container_width=True)
+        df = pd.read_csv(
+            "results.csv",
+            names=["Name", "Roll", "Score"]
+        )
 
-        except Exception:
-            st.info("No Results Yet")
+
+        df["Score"] = pd.to_numeric(
+            df["Score"]
+        )
+
+
+        df = df.sort_values(
+            by="Score",
+            ascending=False
+        )
+
+
+        st.dataframe(
+            df,
+            use_container_width=True
+        )
+
+
+    except Exception:
+
+        st.info("No Results Yet")
