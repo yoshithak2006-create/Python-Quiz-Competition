@@ -1,47 +1,123 @@
 from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.colors import HexColor
+from datetime import datetime
+
 
 def create_certificate(name, score):
-    filename = f"{name}_Certificate.pdf"
 
-    c = canvas.Canvas(filename)
+    file_name = f"{name}_certificate.pdf"
 
-    c.setFont("Helvetica-Bold", 22)
-    c.drawCentredString(300, 780, "PYTHON QUIZ COMPETITION")
+    c = canvas.Canvas(
+        file_name,
+        pagesize=A4
+    )
 
-    c.setFont("Helvetica-Bold", 18)
-    c.drawCentredString(300, 730, "CERTIFICATE OF ACHIEVEMENT")
+    width, height = A4
 
-    c.setFont("Helvetica", 14)
-    c.drawCentredString(
-        300,
-        680,
-        f"This is to certify that {name}"
+
+    # Background border
+
+    c.setStrokeColor(
+        HexColor("#1E3A8A")
+    )
+
+    c.setLineWidth(5)
+
+    c.rect(
+        40,
+        40,
+        width-80,
+        height-80
+    )
+
+
+    # Title
+
+    c.setFont(
+        "Helvetica-Bold",
+        28
     )
 
     c.drawCentredString(
-        300,
-        650,
-        "has successfully completed"
+        width/2,
+        height-150,
+        "CERTIFICATE OF ACHIEVEMENT"
+    )
+
+
+    # Subtitle
+
+    c.setFont(
+        "Helvetica",
+        16
     )
 
     c.drawCentredString(
-        300,
-        620,
-        "Python Quiz Competition"
+        width/2,
+        height-210,
+        "Python Quiz Competition 2026"
+    )
+
+
+    # Student name
+
+    c.setFont(
+        "Helvetica-Bold",
+        22
     )
 
     c.drawCentredString(
-        300,
-        590,
+        width/2,
+        height-300,
+        name
+    )
+
+
+    # Score
+
+    c.setFont(
+        "Helvetica",
+        18
+    )
+
+    c.drawCentredString(
+        width/2,
+        height-360,
         f"Score : {score}/50"
     )
 
-    c.drawCentredString(
-        300,
-        540,
-        "Congratulations!"
+
+    # Date
+
+    c.setFont(
+        "Helvetica",
+        14
     )
+
+    c.drawCentredString(
+        width/2,
+        height-430,
+        f"Date : {datetime.now().strftime('%d-%m-%Y')}"
+    )
+
+
+    # Signature
+
+    c.drawString(
+        100,
+        120,
+        "Coordinator"
+    )
+
+    c.drawString(
+        400,
+        120,
+        "Organizer"
+    )
+
 
     c.save()
 
-    return filename
+
+    return file_name
